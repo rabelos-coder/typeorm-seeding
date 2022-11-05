@@ -39,7 +39,7 @@
 
 ## ❯ Disclaimer
 
-This package is a fork of [typeorm-seeding](https://npm.org/package/typeorm-seeding) with 2 mainly added features:
+This package is a fork of [typeorm-seeding](https://npmjs.com/package/typeorm-seeding) with 2 mainly added features:
 
 1- all seeds are logged in the database in the table `typeorm_seeds` just like the migrations table, in order to control what seeders should run
 2- added a new command `typeorm-seeding create -f file-name` to create a timestamped seeder file, for example `1667669365371-file-name.ts` to control what seeders should run first according to the time they created at
@@ -445,7 +445,7 @@ interface ConfigureOption {
 
 ## ❯ Changelog
 
-[Changelog](https://github.com/w3tecch/typeorm-seeding/releases)
+[Changelog](https://github.com/paranode/typeorm-seeding/releases)
 
 ## ❯ License
 
