@@ -1,3 +1,4 @@
+import { createSeedTable, ISeedTable, getExecutedSeeds } from './../utils/seed-table.util';
 import * as yargs from 'yargs'
 import * as ora from 'ora'
 import * as chalk from 'chalk'
@@ -5,6 +6,7 @@ import { importSeed } from '../importer'
 import { loadFiles, importFiles } from '../utils/file.util'
 import { runSeeder } from '../typeorm-seeding'
 import { configureConnection, getConnectionOptions, ConnectionOptions, createConnection } from '../connection'
+import { logToSeedTable } from '../utils/log-to-seed-table.util';
 
 export class SeedCommand implements yargs.CommandModule {
   command = 'seed'
@@ -70,9 +72,6 @@ export class SeedCommand implements yargs.CommandModule {
     let seedFileObjects: any[] = []
     try {
       seedFileObjects = await Promise.all(seedFiles.map((seedFile) => importSeed(seedFile)))
-      seedFileObjects = seedFileObjects.filter(
-        (seedFileObject) => args.seed === undefined || args.seed === seedFileObject.name,
-      )
       spinner.succeed('Seeders are imported')
     } catch (error) {
       panic(spinner, error, 'Could not import seeders!')
@@ -87,11 +86,25 @@ export class SeedCommand implements yargs.CommandModule {
       panic(spinner, error, 'Database connection failed! Check your typeORM config file.')
     }
 
+    // Create Seed table if not exists
+    spinner.start('Get Executed Seeders & filter seed classes');
+    let seedsAlreadyRan: Array<ISeedTable> = [];
+    try {
+      await createSeedTable(option);
+      seedsAlreadyRan = await getExecutedSeeds(option);
+      const seedRanNames = seedsAlreadyRan.map(sar => sar.className);
+      seedFileObjects = seedFileObjects.filter(sfo => !seedRanNames.includes(sfo.name) || (args.seed && args.seed === sfo.name));
+      spinner.succeed(`Finish Getting Seeders. ${seedsAlreadyRan.length} seeders already ran, ${seedFileObjects.length} seeders are ready to be executed`);
+    } catch(error) {
+      panic(spinner, error, 'Error getting executed seeders');
+    }
+
     // Run seeds
     for (const seedFileObject of seedFileObjects) {
       spinner.start(`Executing ${seedFileObject.name} Seeder`)
       try {
         await runSeeder(seedFileObject)
+        await logToSeedTable(seedFileObject.name, option)
         spinner.succeed(`Seeder ${seedFileObject.name} executed`)
       } catch (error) {
         panic(spinner, error, `Could not run the seed ${seedFileObject.name}!`)

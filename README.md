@@ -5,14 +5,14 @@
 <h1 align="center" style="text-align: center;">TypeORM Seeding</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/typeorm-seeding">
-    <img src="https://img.shields.io/npm/v/typeorm-seeding" alt="NPM package" />
+  <a href="https://www.npmjs.com/package/@paranode/typeorm-seeding">
+    <img src="https://img.shields.io/npm/v/@paranode/typeorm-seeding" alt="NPM package" />
   </a>
-  <a href="https://travis-ci.org/w3tecch/typeorm-seeding">
-    <img src="https://travis-ci.org/w3tecch/typeorm-seeding.svg?branch=master" alt="Build Status" />
+  <a href="https://travis-ci.org/paranode/typeorm-seeding">
+    <img src="https://travis-ci.org/paranode/typeorm-seeding.svg?branch=master" alt="Build Status" />
   </a>
-  <a href="https://david-dm.org/w3tecch/typeorm-seeding">
-    <img src="https://david-dm.org/w3tecch/typeorm-seeding/status.svg?style=flat" alt="Dependency" />
+  <a href="https://david-dm.org/paranode/typeorm-seeding">
+    <img src="https://david-dm.org/paranode/typeorm-seeding/status.svg?style=flat" alt="Dependency" />
   </a>
     <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Sematic-Release" /></a>
 </p>
@@ -20,13 +20,15 @@
 <p align="center">
   <b>A delightful way to seed test data into your database.</b></br>
   <span>Inspired by the awesome framework <a href="https://laravel.com/">laravel</a> in PHP and of the repositories from <a href="https://github.com/pleerock">pleerock</a></span></br>
-  <sub>Made with ❤️ by <a href="https://github.com/hirsch88">Gery Hirschfeld</a> and <a href="https://github.com/w3tecch/typeorm-seeding/graphs/contributors">contributors</a></sub>
+  <sub>Made with ❤️ by <a href="https://github.com/sayedmahmoud266">Sayed Mahmoud</a>, <a href="https://github.com/hirsch88">Gery Hirschfeld</a> and <a href="https://github.com/w3tecch/typeorm-seeding/graphs/contributors">contributors</a></sub>
 </p>
 
 <br />
 
 ## ❯ Table of contents
 
+- [Disclaimer](#-disclaimer)
+- [Versions](#-versions)
 - [Introduction](#-introduction)
 - [Installation](#-installation)
 - [Basic Seeder](#-basic-seeder)
@@ -34,6 +36,22 @@
 - [Seeding Data in Testing](#-seeding-data-in-testing)
 - [Changelog](#-changelog)
 - [License](#-license)
+
+## ❯ Disclaimer
+
+This package is a fork of [typeorm-seeding](https://npm.org/package/typeorm-seeding) with 2 mainly added features:
+
+1- all seeds are logged in the database in the table `typeorm_seeds` just like the migrations table, in order to control what seeders should run
+2- added a new command `typeorm-seeding create -f file-name` to create a timestamped seeder file, for example `1667669365371-file-name.ts` to control what seeders should run first according to the time they created at
+
+## ❯ Versions
+
+make sure you install the correct version for your corresponding typeorm version
+
+| @paranode/typeorm-seeding | typeorm |
+| ------------------------- | ------- |
+| version: 2.*              | 0.2.*   |
+| version: 3.*              | 0.3.*   |
 
 ## ❯ Introduction
 
@@ -112,8 +130,8 @@ And last but not least, create a seeder. The seeder can be called by the configu
 > Note: `seed:run` must be configured first. Go to [CLI Configuration](#cli-configuration).
 
 ```typescript
-// create-pets.seed.ts
-export default class CreatePets implements Seeder {
+// 1667669365371-create-pets.seed.ts
+export default class CreatePets1667669365371 implements Seeder {
   public async run(factory: Factory, connection: Connection): Promise<any> {
     await factory(Pet)().createMany(10)
   }
@@ -153,6 +171,10 @@ module.exports = {
   ...
   seeds: ['src/seeds/**/*{.ts,.js}'],
   factories: ['src/factories/**/*{.ts,.js}'],
+  // if you want to use cli to generate seed files in a specific folder
+  cli: {
+    seedsDir: 'src/seeds'
+  }
 }
 ```
 
@@ -169,8 +191,9 @@ Add the following scripts to your `package.json` file to configure the seed cli 
 
 ```
 "scripts": {
-  "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
-  "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+  "seed:config": "ts-node ./node_modules/@paranode/typeorm-seeding/dist/cli.js config",
+  "seed:run": "ts-node ./node_modules/@paranode/typeorm-seeding/dist/cli.js seed",
+  "seed:create": "ts-node ./node_modules/@paranode/typeorm-seeding/dist/cli.js create"
   ...
 }
 ```
@@ -198,7 +221,7 @@ Add the following TypeORM cli commands to the package.json to drop and sync the 
 | `--connection` or `-c` | null            | Name of the typeorm connection. Required if there are multiple connections. |
 | `--configName` or `-n` | `ormconfig.js`  | Name to the typeorm config file.                                            |
 | `--root` or `-r`       | `process.cwd()` | Path to the typeorm config file.                                            |
-
+| `--fileName` or `-f`   | null            | Name of the generated seeder name, required on `seed:create`
 ## ❯ Basic Seeder
 
 A seeder class only contains one method by default `run`. Within this method, you may insert data into your database. For manually insertion use the [Query Builder](https://typeorm.io/#/select-query-builder) or use the [Entity Factory](#-using-entity-factory)

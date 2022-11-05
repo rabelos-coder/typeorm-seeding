@@ -10,6 +10,10 @@ import { printError } from './utils/log.util'
 interface SeedingOptions {
   factories: string[]
   seeds: string[]
+  seedsTableName: string
+  cli?: {
+    seedsDir?: string
+  }
 }
 
 export declare type ConnectionOptions = TypeORMConnectionOptions & SeedingOptions

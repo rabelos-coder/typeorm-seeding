@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "sample", "dist", "**/*test.ts"]
+  "compilerOptions": {
+    "skipLibCheck": true,
+  },
+  "exclude": ["node_modules", "sample", "dist", "**/*test.ts", "node_modules/*"]
 }
