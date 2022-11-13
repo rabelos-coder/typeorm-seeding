@@ -1,4 +1,4 @@
-import { SeederConstructor, Seeder } from './types'
+import { SeederConstructor, Seeder } from './types.js'
 
 export const importSeed = async (filePath: string): Promise<SeederConstructor> => {
   const seedFileObject: { [key: string]: SeederConstructor } = await import(filePath)

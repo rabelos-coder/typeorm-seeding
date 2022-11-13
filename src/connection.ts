@@ -1,11 +1,16 @@
 import {
   ConnectionOptionsReader,
-  Connection as TypeORMConnection,
-  ConnectionOptions as TypeORMConnectionOptions,
-  createConnection as TypeORMCreateConnection,
-  getConnection as TypeORMGetConnection,
+  DataSource as TODataSource,
+  DataSourceOptions,
 } from 'typeorm'
-import { printError } from './utils/log.util'
+import { printError } from './utils/log.util.js'
+
+
+const createTypeOrmConnection = (options: DataSourceOptions) => {
+  const ds = new TODataSource(options);
+  return ds.initialize();
+}
+
 
 interface SeedingOptions {
   factories: string[]
@@ -16,7 +21,10 @@ interface SeedingOptions {
   }
 }
 
-export declare type ConnectionOptions = TypeORMConnectionOptions & SeedingOptions
+export declare type ConnectionOptions = DataSourceOptions & SeedingOptions
+export class DataSource extends TODataSource {
+  declare options: ConnectionOptions
+}
 
 export interface ConfigureOption {
   root?: string
@@ -48,7 +56,7 @@ export const configureConnection = (option: ConfigureOption = {}) => {
   }
 }
 
-export const setConnectionOptions = (options: Partial<TypeORMConnectionOptions>): void => {
+export const setConnectionOptions = (options: Partial<DataSourceOptions>): void => {
   ;(global as any)[KEY].overrideConnectionOptions = options
 }
 
@@ -62,7 +70,9 @@ export const getConnectionOptions = async (): Promise<ConnectionOptions> => {
       root: configureOption.root,
       configName: configureOption.configName,
     })
-    let options = (await reader.all()) as any[]
+    let o = (await reader.all() as unknown as Array<{dataSource: DataSource, baseDirectory: string}>)
+    let options = o.map(option => option.dataSource) as Array<DataSource>
+
     if (connection !== undefined && connection !== '') {
       const filteredOptions = options.filter((o) => o.name === connection)
       if (filteredOptions.length === 1) {
@@ -76,7 +86,7 @@ export const getConnectionOptions = async (): Promise<ConnectionOptions> => {
       }
     }
     if (options.length === 1) {
-      const option = options[0]
+      const option = options[0].options
       if (!option.factories) {
         option.factories = [process.env.TYPEORM_SEEDING_FACTORIES || 'src/database/factories/**/*{.ts,.js}']
       }
@@ -94,7 +104,7 @@ export const getConnectionOptions = async (): Promise<ConnectionOptions> => {
   return ormConfig
 }
 
-export const createConnection = async (option?: TypeORMConnectionOptions): Promise<TypeORMConnection> => {
+export const createConnection = async (option?: DataSourceOptions): Promise<DataSource> => {
   const configureOption = (global as any)[KEY].configureOption
   let connection = (global as any)[KEY].connection
   let ormConfig = (global as any)[KEY].ormConfig
@@ -104,13 +114,8 @@ export const createConnection = async (option?: TypeORMConnectionOptions): Promi
   }
 
   if (connection === undefined) {
-    try {
-      connection = await TypeORMGetConnection(configureOption.name)
-    } catch (_) {}
-    if (connection === undefined) {
-      connection = await TypeORMCreateConnection(ormConfig)
-    }
-    ;(global as any)[KEY].connection = connection
+      connection = await createTypeOrmConnection(ormConfig);
+    (global as any)[KEY].connection = connection
   }
   return connection
 }

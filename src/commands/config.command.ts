@@ -1,7 +1,9 @@
+import { readPackage } from 'read-pkg';
 import * as yargs from 'yargs'
-import * as chalk from 'chalk'
-import { printError } from '../utils/log.util'
-import { configureConnection, getConnectionOptions } from '../connection'
+import chalk from 'chalk'
+import { printError } from '../utils/log.util.js'
+import { configureConnection, getConnectionOptions } from '../connection.js'
+import path from 'path';
 
 export class ConfigCommand implements yargs.CommandModule {
   command = 'config'
@@ -9,26 +11,21 @@ export class ConfigCommand implements yargs.CommandModule {
 
   builder(args: yargs.Argv) {
     return args
-      .option('n', {
-        alias: 'configName',
+      .option('d', {
+        alias: 'datasource',
         default: '',
-        describe: 'Name of the typeorm config file (json or js).',
-      })
-      .option('c', {
-        alias: 'connection',
-        default: '',
-        describe: 'Name of the typeorm connection',
+        describe: 'Name of the typeorm datasource file (json or js).',
       })
       .option('r', {
         alias: 'root',
         default: process.cwd(),
-        describe: 'Path to your typeorm config file',
+        describe: 'Path to your typeorm datasource file',
       })
   }
 
   async handler(args: yargs.Arguments) {
     const log = console.log
-    const pkg = require('../../package.json')
+    const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/@paranode/typeorm-seeding') });
     log('🌱  ' + chalk.bold(`TypeORM Seeding v${(pkg as any).version}`))
     try {
       configureConnection({

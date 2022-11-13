@@ -8,13 +8,7 @@
   <a href="https://www.npmjs.com/package/@paranode/typeorm-seeding">
     <img src="https://img.shields.io/npm/v/@paranode/typeorm-seeding" alt="NPM package" />
   </a>
-  <a href="https://travis-ci.org/paranode/typeorm-seeding">
-    <img src="https://travis-ci.org/paranode/typeorm-seeding.svg?branch=master" alt="Build Status" />
-  </a>
-  <a href="https://david-dm.org/paranode/typeorm-seeding">
-    <img src="https://david-dm.org/paranode/typeorm-seeding/status.svg?style=flat" alt="Dependency" />
-  </a>
-    <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Sematic-Release" /></a>
+  <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Sematic-Release" /></a>
 </p>
 
 <p align="center">
@@ -132,7 +126,7 @@ And last but not least, create a seeder. The seeder can be called by the configu
 ```typescript
 // 1667669365371-create-pets.seed.ts
 export default class CreatePets1667669365371 implements Seeder {
-  public async run(factory: Factory, connection: Connection): Promise<any> {
+  public async run(factory: Factory, connection: DataSource): Promise<any> {
     await factory(Pet)().createMany(10)
   }
 }
@@ -147,15 +141,9 @@ Before using this TypeORM extension please read the [TypeORM Getting Started](ht
 After that install the extension with `npm` or `yarn`.
 
 ```bash
-npm i typeorm-seeding
+npm i @paranode/typeorm-seeding
 # or
-yarn add typeorm-seeding
-```
-
-Optional, install the type definitions of the `Faker` library.
-
-```bash
-npm install -D @types/faker
+yarn add @paranode/typeorm-seeding
 ```
 
 ### Configuration
@@ -164,18 +152,22 @@ To configure the path to your seeds and factories change the TypeORM config file
 
 > The default paths are `src/database/{seeds,factories}/**/*{.ts,.js}`
 
-**ormconfig.js**
+**ormconfig.ts**
 
-```JavaScript
-module.exports = {
+```Typescript
+...
+import type { ConnectionOptions } from '@paranode/typeorm-seeding';
+...
+
+export const dataSource = new DataSource({
   ...
-  seeds: ['src/seeds/**/*{.ts,.js}'],
-  factories: ['src/factories/**/*{.ts,.js}'],
-  // if you want to use cli to generate seed files in a specific folder
+  seeds: ['src/database/seeds/*{.ts,.js}'],
+  migrations: ['src/database/migrations/*{.ts,.js}'],
   cli: {
-    seedsDir: 'src/seeds'
-  }
-}
+    seedsDir: 'src/database/seeds',
+  },
+  ...
+} as unknown as ConnectionOptions)
 ```
 
 **.env**
@@ -191,9 +183,9 @@ Add the following scripts to your `package.json` file to configure the seed cli 
 
 ```
 "scripts": {
-  "seed:config": "ts-node ./node_modules/@paranode/typeorm-seeding/dist/cli.js config",
-  "seed:run": "ts-node ./node_modules/@paranode/typeorm-seeding/dist/cli.js seed",
-  "seed:create": "ts-node ./node_modules/@paranode/typeorm-seeding/dist/cli.js create"
+  "seed:config": "typeorm-seeding config",
+  "seed:run": "typeorm-seeding seed",
+  "seed:create": "typeorm-seeding create"
   ...
 }
 ```
@@ -218,8 +210,7 @@ Add the following TypeORM cli commands to the package.json to drop and sync the 
 | Option                 | Default         | Description                                                                 |
 | ---------------------- | --------------- | --------------------------------------------------------------------------- |
 | `--seed` or `-s`       | null            | Option to specify a seeder class to run individually.                       |
-| `--connection` or `-c` | null            | Name of the typeorm connection. Required if there are multiple connections. |
-| `--configName` or `-n` | `ormconfig.js`  | Name to the typeorm config file.                                            |
+| `--dataSource` or `-d` | `ormconfig.ts`  | Name to the typeorm config file.                                            |
 | `--root` or `-r`       | `process.cwd()` | Path to the typeorm config file.                                            |
 | `--fileName` or `-f`   | null            | Name of the generated seeder name, required on `seed:create`
 ## ❯ Basic Seeder
@@ -229,12 +220,12 @@ A seeder class only contains one method by default `run`. Within this method, yo
 > Note. The seeder files will be executed alphabetically.
 
 ```typescript
-import { Factory, Seeder } from 'typeorm-seeding'
-import { Connection } from 'typeorm'
+import { Factory, Seeder } from '@paranode/typeorm-seeding'
+import { DataSource } from 'typeorm'
 import { User } from '../entities'
 
-export default class CreateUsers implements Seeder {
-  public async run(factory: Factory, connection: Connection): Promise<any> {
+export default class CreateUsers1668297160475 implements Seeder {
+  public async run(factory: Factory, connection: DataSource): Promise<any> {
     await connection
       .createQueryBuilder()
       .insert()
@@ -269,7 +260,7 @@ define: <Entity, Context>(entity: Entity, factoryFn: FactoryFunction<Entity, Con
 ```
 
 ```typescript
-import Faker from 'faker'
+import Faker from '@faker-js/faker'
 import { define } from 'typeorm-seeding'
 import { User } from '../entities'
 
@@ -450,3 +441,7 @@ interface ConfigureOption {
 ## ❯ License
 
 [MIT](LICENSE)
+
+## ❯ Contributions
+
+Contributions are welcome. open a PR in https://github.com/ParaNode/typeorm-seeding/pulls

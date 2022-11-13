@@ -1,20 +1,20 @@
 import 'reflect-metadata'
-import { ObjectType, getConnection, Connection } from 'typeorm'
+import { DataSource, ObjectType } from 'typeorm'
 
-import { EntityFactory } from './entity-factory'
-import { EntityFactoryDefinition, Factory, FactoryFunction, SeederConstructor, Seeder } from './types'
-import { getNameOfEntity } from './utils/factory.util'
-import { loadFiles, importFiles } from './utils/file.util'
-import { ConfigureOption, configureConnection, getConnectionOptions, createConnection } from './connection'
+import { EntityFactory } from './entity-factory.js'
+import { EntityFactoryDefinition, Factory, FactoryFunction, SeederConstructor, Seeder } from './types.js'
+import { getNameOfEntity } from './utils/factory.util.js'
+import { loadFiles, importFiles } from './utils/file.util.js'
+import { ConfigureOption, configureConnection, getConnectionOptions, createConnection } from './connection.js'
 
 // -------------------------------------------------------------------------
 // Handy Exports
 // -------------------------------------------------------------------------
 
-export * from './importer'
-export * from './connection'
-export { Factory, Seeder } from './types'
-export { times } from './helpers'
+export * from './importer.js'
+export * from './connection.js'
+export { Factory, Seeder } from './types.js'
+export { times } from './helpers.js'
 
 // -------------------------------------------------------------------------
 // Types & Variables
@@ -49,11 +49,11 @@ export const runSeeder = async (clazz: SeederConstructor): Promise<any> => {
 // -------------------------------------------------------------------------
 // Facade functions for testing
 // -------------------------------------------------------------------------
-export const useRefreshDatabase = async (options: ConfigureOption = {}): Promise<Connection> => {
+export const useRefreshDatabase = async (options: ConfigureOption = {}): Promise<DataSource> => {
   configureConnection(options)
   const option = await getConnectionOptions()
   const connection = await createConnection(option)
-  if (connection && connection.isConnected) {
+  if (connection && connection.isInitialized) {
     await connection.dropDatabase()
     await connection.synchronize()
   }
@@ -62,7 +62,7 @@ export const useRefreshDatabase = async (options: ConfigureOption = {}): Promise
 
 export const tearDownDatabase = async (): Promise<void> => {
   const connection = await createConnection()
-  return connection && connection.isConnected ? connection.close() : undefined
+  return connection && connection.isInitialized ? connection.close() : undefined
 }
 
 export const useSeeding = async (options: ConfigureOption = {}): Promise<void> => {

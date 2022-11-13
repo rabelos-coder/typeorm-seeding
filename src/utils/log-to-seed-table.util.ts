@@ -1,5 +1,5 @@
-import { createConnection } from './../connection';
-import { ConnectionOptions } from "../connection";
+import { createConnection } from './../connection.js';
+import { ConnectionOptions } from "../connection.js";
 
 
 export const logToSeedTable = async (seederName: string, options: ConnectionOptions) => {

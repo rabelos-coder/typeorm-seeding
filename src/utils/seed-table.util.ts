@@ -1,5 +1,5 @@
 import { Table } from 'typeorm'
-import { createConnection, ConnectionOptions } from './../connection'
+import { createConnection, ConnectionOptions } from './../connection.js'
 
 export interface ISeedTable {
   className: string

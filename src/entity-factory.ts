@@ -1,9 +1,9 @@
-import * as Faker from 'faker'
+import { faker } from '@faker-js/faker'
 import { ObjectType, SaveOptions } from 'typeorm'
-import { FactoryFunction, EntityProperty } from './types'
-import { isPromiseLike } from './utils/factory.util'
-import { printError, printWarning } from './utils/log.util'
-import { getConnectionOptions, createConnection } from './connection'
+import { FactoryFunction, EntityProperty } from './types.js'
+import { isPromiseLike } from './utils/factory.util.js'
+import { printError, printWarning } from './utils/log.util.js'
+import { getConnectionOptions, createConnection } from './connection.js'
 
 export class EntityFactory<Entity, Context> {
   private mapFunction: (entity: Entity) => Promise<Entity>
@@ -41,7 +41,7 @@ export class EntityFactory<Entity, Context> {
   public async create(overrideParams: EntityProperty<Entity> = {}, saveOptions?: SaveOptions): Promise<Entity> {
     const option = await getConnectionOptions()
     const connection = await createConnection(option)
-    if (connection && connection.isConnected) {
+    if (connection && connection.isInitialized) {
       const em = connection.createEntityManager()
       try {
         const entity = await this.makeEnity(overrideParams, true)
@@ -97,14 +97,14 @@ export class EntityFactory<Entity, Context> {
       throw new Error('Could not found entity')
     }
 
-    let entity = await this.resolveEntity(this.factory(Faker, this.context), isSeeding)
+    let entity = await this.resolveEntity(this.factory(faker, this.context), isSeeding)
     if (this.mapFunction) {
       entity = await this.mapFunction(entity)
     }
 
     for (const key in overrideParams) {
       if (overrideParams.hasOwnProperty(key)) {
-        entity[key] = overrideParams[key]
+        entity[key] = overrideParams[key] as any
       }
     }
 

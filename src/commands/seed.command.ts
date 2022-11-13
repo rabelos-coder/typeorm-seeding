@@ -1,12 +1,14 @@
-import { createSeedTable, ISeedTable, getExecutedSeeds } from './../utils/seed-table.util';
+import { createSeedTable, ISeedTable, getExecutedSeeds } from './../utils/seed-table.util.js';
 import * as yargs from 'yargs'
-import * as ora from 'ora'
-import * as chalk from 'chalk'
-import { importSeed } from '../importer'
-import { loadFiles, importFiles } from '../utils/file.util'
-import { runSeeder } from '../typeorm-seeding'
-import { configureConnection, getConnectionOptions, ConnectionOptions, createConnection } from '../connection'
-import { logToSeedTable } from '../utils/log-to-seed-table.util';
+import ora, { Ora } from 'ora'
+import chalk from 'chalk'
+import { importSeed } from '../importer.js'
+import { loadFiles, importFiles } from '../utils/file.util.js'
+import { runSeeder } from '../typeorm-seeding.js'
+import { configureConnection, getConnectionOptions, ConnectionOptions, createConnection } from '../connection.js'
+import { logToSeedTable } from '../utils/log-to-seed-table.util.js';
+import { readPackage } from 'read-pkg';
+import path from 'path';
 
 export class SeedCommand implements yargs.CommandModule {
   command = 'seed'
@@ -14,15 +16,10 @@ export class SeedCommand implements yargs.CommandModule {
 
   builder(args: yargs.Argv) {
     return args
-      .option('n', {
-        alias: 'configName',
+      .option('d', {
+        alias: 'datasrouce',
         default: '',
-        describe: 'Name of the typeorm config file (json or js).',
-      })
-      .option('c', {
-        alias: 'connection',
-        default: '',
-        describe: 'Name of the typeorm connection',
+        describe: 'Name of the typeorm datasource file (json or js).',
       })
       .option('r', {
         alias: 'root',
@@ -37,7 +34,7 @@ export class SeedCommand implements yargs.CommandModule {
 
   async handler(args: yargs.Arguments) {
     const log = console.log
-    const pkg = require('../../package.json')
+    const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/@paranode/typeorm-seeding') })
     log('🌱  ' + chalk.bold(`TypeORM Seeding v${(pkg as any).version}`))
     const spinner = ora('Loading ormconfig').start()
     const configureOption = {
@@ -93,6 +90,7 @@ export class SeedCommand implements yargs.CommandModule {
       await createSeedTable(option);
       seedsAlreadyRan = await getExecutedSeeds(option);
       const seedRanNames = seedsAlreadyRan.map(sar => sar.className);
+      seedFileObjects = seedFileObjects.map(sfo => sfo?.default ? sfo.default : sfo);
       seedFileObjects = seedFileObjects.filter(sfo => !seedRanNames.includes(sfo.name) || (args.seed && args.seed === sfo.name));
       spinner.succeed(`Finish Getting Seeders. ${seedsAlreadyRan.length} seeders already ran, ${seedFileObjects.length} seeders are ready to be executed`);
     } catch(error) {
@@ -116,7 +114,7 @@ export class SeedCommand implements yargs.CommandModule {
   }
 }
 
-function panic(spinner: ora.Ora, error: Error, message: string) {
+function panic(spinner: Ora, error: Error, message: string) {
   spinner.fail(message)
   console.error(error)
   process.exit(1)

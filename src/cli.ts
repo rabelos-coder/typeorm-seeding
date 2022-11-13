@@ -1,11 +1,12 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node-esm
 import 'reflect-metadata'
-import * as yargs from 'yargs'
-import { SeedCommand } from './commands/seed.command'
-import { ConfigCommand } from './commands/config.command'
-import { CreateCommand } from './commands/create.command'
+import yargs from 'yargs/yargs'
+import { SeedCommand } from './commands/seed.command.js'
+import { ConfigCommand } from './commands/config.command.js'
+import { CreateCommand } from './commands/create.command.js'
 
-yargs
+
+yargs(process.argv.slice(2))
   .usage('Usage: $0 <command> [options]')
   .command(new ConfigCommand())
   .command(new SeedCommand())
