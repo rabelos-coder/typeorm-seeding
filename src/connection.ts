@@ -71,7 +71,7 @@ export const getConnectionOptions = async (): Promise<ConnectionOptions> => {
       configName: configureOption.configName,
     })
     let o = (await reader.all() as unknown as Array<{dataSource: DataSource, baseDirectory: string}>)
-    let options = o.map(option => option.dataSource) as Array<DataSource>
+    let options = o.map(option => option.dataSource || option) as Array<DataSource>
 
     if (connection !== undefined && connection !== '') {
       const filteredOptions = options.filter((o) => o.name === connection)
