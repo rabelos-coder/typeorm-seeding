@@ -39,7 +39,7 @@ export class SeedCommand implements yargs.CommandModule {
     const spinner = ora('Loading ormconfig').start()
     const configureOption = {
       root: args.root as string,
-      configName: args.configName as string,
+      configName: args.datasource as string,
       connection: args.connection as string,
     }
 
