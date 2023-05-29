@@ -30,7 +30,7 @@ export class ConfigCommand implements yargs.CommandModule {
     try {
       configureConnection({
         root: args.root as string,
-        configName: args.configName as string,
+        configName: args.datasource as string,
         connection: args.connection as string,
       })
       const option = await getConnectionOptions()
