@@ -3,7 +3,7 @@ import {
   DataSource as TODataSource,
   DataSourceOptions,
 } from 'typeorm'
-import { printError } from './utils/log.util.js'
+import { printError } from './utils/log.util'
 
 
 const createTypeOrmConnection = (options: DataSourceOptions) => {

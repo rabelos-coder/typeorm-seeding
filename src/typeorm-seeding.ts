@@ -1,20 +1,20 @@
 import 'reflect-metadata'
 import { DataSource, ObjectType } from 'typeorm'
 
-import { EntityFactory } from './entity-factory.js'
-import { EntityFactoryDefinition, Factory, FactoryFunction, SeederConstructor, Seeder } from './types.js'
-import { getNameOfEntity } from './utils/factory.util.js'
-import { loadFiles, importFiles } from './utils/file.util.js'
-import { ConfigureOption, configureConnection, getConnectionOptions, createConnection } from './connection.js'
+import { EntityFactory } from './entity-factory'
+import { EntityFactoryDefinition, Factory, FactoryFunction, SeederConstructor, Seeder } from './types'
+import { getNameOfEntity } from './utils/factory.util'
+import { loadFiles, importFiles } from './utils/file.util'
+import { ConfigureOption, configureConnection, getConnectionOptions, createConnection } from './connection'
 
 // -------------------------------------------------------------------------
 // Handy Exports
 // -------------------------------------------------------------------------
 
-export * from './importer.js'
-export * from './connection.js'
-export { Factory, Seeder } from './types.js'
-export { times } from './helpers.js'
+export * from './importer'
+export * from './connection'
+export { Factory, Seeder } from './types'
+export { times } from './helpers'
 
 // -------------------------------------------------------------------------
 // Types & Variables

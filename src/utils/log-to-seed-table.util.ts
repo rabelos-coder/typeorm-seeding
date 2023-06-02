@@ -1,4 +1,4 @@
-import { createConnection } from './../connection.js';
+import { createConnection } from './../connection';
 import { ConnectionOptions } from "../connection.js";
 
 

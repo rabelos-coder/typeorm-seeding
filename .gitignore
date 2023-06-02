@@ -1,5 +1,6 @@
 ### generated stuff ###
 dist
+build
 lib
 es
 coverage

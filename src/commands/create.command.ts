@@ -1,4 +1,4 @@
-import { readPackage } from 'read-pkg';
+import readPackage from 'read-pkg';
 import chalk from "chalk";
 import ora, { Ora } from "ora";
 import * as yargs from "yargs";
@@ -7,6 +7,14 @@ import * as fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import makeTemplate from "../templates/create-seeder.template.js";
+
+
+interface IArgs {
+  fileName: string;
+  datasource: string;
+  root: string;
+  connection: string;
+}
 
 export class CreateCommand implements yargs.CommandModule {
   command = 'create';
@@ -32,16 +40,16 @@ export class CreateCommand implements yargs.CommandModule {
     });
   }
 
-  async handler(args: yargs.Arguments) {
+  async handler(args: yargs.Arguments<IArgs>) {
     const log = console.log;
     const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/@paranode/typeorm-seeding') });
     log('🌱  ' + chalk.bold(`TypeORM Seeding v${(pkg as any).version}`));
 
     const spinner = ora('Loading ormconfig').start()
     const configureOption = {
-      root: args.root as string,
-      configName: args.datasource as string,
-      connection: args.connection as string,
+      root: args.root,
+      configName: args.datasource,
+      connection: args.connection,
     }
 
     // Get TypeORM config file
@@ -52,7 +60,8 @@ export class CreateCommand implements yargs.CommandModule {
       spinner.succeed('ORM Config loaded')
 
     } catch (error) {
-      panic(spinner, error, 'Could not load the config file!')
+      panic(spinner, error, 'Could not load the config file!');
+      return;
     }
 
     let seedsDir = 'src/database/seeds';
@@ -69,8 +78,8 @@ export class CreateCommand implements yargs.CommandModule {
 
     spinner.start('Creating file');
     const now = Date.now();
-    const fileName = `${now}-${_.kebabCase(args.fileName as string)}`;
-    const className = `${_.upperFirst(_.camelCase(args.fileName as string))}${now}`;
+    const fileName = `${now}-${_.kebabCase(args.fileName)}`;
+    const className = `${_.upperFirst(_.camelCase(args.fileName))}${now}`;
 
     try {
       if (!fs.existsSync(seedsDir)) {

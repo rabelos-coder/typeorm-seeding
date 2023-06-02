@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker'
 import { ObjectType, SaveOptions } from 'typeorm'
-import { FactoryFunction, EntityProperty } from './types.js'
-import { isPromiseLike } from './utils/factory.util.js'
-import { printError, printWarning } from './utils/log.util.js'
-import { getConnectionOptions, createConnection } from './connection.js'
+import { FactoryFunction, EntityProperty } from './types'
+import { isPromiseLike } from './utils/factory.util'
+import { printError, printWarning } from './utils/log.util'
+import { getConnectionOptions, createConnection } from './connection'
 
 export class EntityFactory<Entity, Context> {
   private mapFunction: (entity: Entity) => Promise<Entity>

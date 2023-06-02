@@ -1,7 +1,7 @@
 import { Faker } from '@faker-js/faker'
 import { DataSource, ObjectType } from 'typeorm'
 
-import { EntityFactory } from './entity-factory.js'
+import { EntityFactory } from './entity-factory'
 
 /**
  * FactoryFunction is the fucntion, which generate a new filled entity

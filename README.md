@@ -12,9 +12,9 @@
 </p>
 
 <p align="center">
-  <b>A delightful way to seed test data into your database.</b></br>
+  <b>A delightful way to seed test data into your database.<b></br>
   <span>Inspired by the awesome framework <a href="https://laravel.com/">laravel</a> in PHP and of the repositories from <a href="https://github.com/pleerock">pleerock</a></span></br>
-  <sub>Made with ❤️ by <a href="https://github.com/sayedmahmoud266">Sayed Mahmoud</a>, <a href="https://github.com/hirsch88">Gery Hirschfeld</a> and <a href="https://github.com/w3tecch/typeorm-seeding/graphs/contributors">contributors</a></sub>
+  <sub>Made with ❤️ by <a href="https://github.com/sayedmahmoud266">Sayed Mahmoud</a>, <a href="https://github.com/hirsch88">Gery Hirschfeld</a> and <a href="https://github.com/@paranode/typeorm-seeding/graphs/contributors">contributors</a></sub>
 </p>
 
 <br />
@@ -154,7 +154,7 @@ To configure the path to your seeds and factories change the TypeORM config file
 
 **ormconfig.ts**
 
-```Typescript
+```typescript
 ...
 import type { ConnectionOptions } from '@paranode/typeorm-seeding';
 ...
@@ -172,16 +172,26 @@ export const dataSource = new DataSource({
 
 **.env**
 
-```
+```env
 TYPEORM_SEEDING_FACTORIES=src/factories/**/*{.ts,.js}
 TYPEORM_SEEDING_SEEDS=src/seeds/**/*{.ts,.js}
 ```
 
 ### CLI Configuration
 
+#### Available Binaries
+
+For better compatibily there are multiple compiled options for the cli binary to cover most of the use cases:
+
+- `typeorm-seeding` regular commonjs
+- `typeorm-seeding-ts-node-commonjs` using ts-node loader
+- `typeorm-seeding-ts-node-esm` using ts-node/esm loader
+
+#### Usage Guide
+
 Add the following scripts to your `package.json` file to configure the seed cli commands.
 
-```
+```json
 "scripts": {
   "seed:config": "typeorm-seeding config",
   "seed:run": "typeorm-seeding seed",
@@ -192,11 +202,11 @@ Add the following scripts to your `package.json` file to configure the seed cli 
 
 To execute the seed run `npm run seed:run` in the terminal.
 
-> Note: More CLI options are [here](#cli-options)
+> Note 1: More CLI options are [here](#cli-options)
 
 Add the following TypeORM cli commands to the package.json to drop and sync the database.
 
-```
+```json
 "scripts": {
   ...
   "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",

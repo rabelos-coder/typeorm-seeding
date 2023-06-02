@@ -1,14 +1,21 @@
-import { createSeedTable, ISeedTable, getExecutedSeeds } from './../utils/seed-table.util.js';
+import { createSeedTable, ISeedTable, getExecutedSeeds } from './../utils/seed-table.util';
 import * as yargs from 'yargs'
 import ora, { Ora } from 'ora'
 import chalk from 'chalk'
-import { importSeed } from '../importer.js'
-import { loadFiles, importFiles } from '../utils/file.util.js'
-import { runSeeder } from '../typeorm-seeding.js'
-import { configureConnection, getConnectionOptions, ConnectionOptions, createConnection } from '../connection.js'
-import { logToSeedTable } from '../utils/log-to-seed-table.util.js';
-import { readPackage } from 'read-pkg';
+import { importSeed } from '../importer'
+import { loadFiles, importFiles } from '../utils/file.util'
+import { runSeeder } from '../typeorm-seeding'
+import { configureConnection, getConnectionOptions, ConnectionOptions, createConnection } from '../connection'
+import { logToSeedTable } from '../utils/log-to-seed-table.util';
+import readPackage from 'read-pkg';
 import path from 'path';
+
+interface IArgs {
+  datasource: string;
+  root: string;
+  seed: string
+  connection: string;
+}
 
 export class SeedCommand implements yargs.CommandModule {
   command = 'seed'
@@ -17,7 +24,7 @@ export class SeedCommand implements yargs.CommandModule {
   builder(args: yargs.Argv) {
     return args
       .option('d', {
-        alias: 'datasrouce',
+        alias: 'datasource',
         default: '',
         describe: 'Name of the typeorm datasource file (json or js).',
       })
@@ -32,15 +39,15 @@ export class SeedCommand implements yargs.CommandModule {
       })
   }
 
-  async handler(args: yargs.Arguments) {
+  async handler(args: yargs.Arguments<IArgs>) {
     const log = console.log
     const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/@paranode/typeorm-seeding') })
     log('🌱  ' + chalk.bold(`TypeORM Seeding v${(pkg as any).version}`))
     const spinner = ora('Loading ormconfig').start()
     const configureOption = {
-      root: args.root as string,
-      configName: args.datasource as string,
-      connection: args.connection as string,
+      root: args.root,
+      configName: args.datasource,
+      connection: args.connection,
     }
 
     // Get TypeORM config file
@@ -50,7 +57,8 @@ export class SeedCommand implements yargs.CommandModule {
       option = await getConnectionOptions()
       spinner.succeed('ORM Config loaded')
     } catch (error) {
-      panic(spinner, error, 'Could not load the config file!')
+      panic(spinner, error, 'Could not load the config file!');
+      return;
     }
 
     // Find all factories and seed with help of the config
