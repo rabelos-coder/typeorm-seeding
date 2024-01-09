@@ -8491,14 +8491,15 @@ quick-lru@^5.1.1:
   resolved "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-"rabeloscoder-typeorm-seeding@file:../../.nvm/versions/node/v20.10.0/lib/node_modules/rabeloscoder-typeorm-seeding":
-  version "3.1.6"
-  resolved "file:../../.nvm/versions/node/v20.10.0/lib/node_modules/rabeloscoder-typeorm-seeding"
+"rabeloscoder-typeorm-seeding@file:":
+  version "3.1.8"
+  resolved "file:"
   dependencies:
     "@faker-js/faker" "^7.6.0"
     chalk "4.1.2"
     glob "8.0.3"
     ora "5.4.1"
+    rabeloscoder-typeorm-seeding "file:"
     read-pkg "5.2.0"
     reflect-metadata "0.1.13"
     release-it "^15.5.0"

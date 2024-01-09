@@ -1,16 +1,10 @@
-import {
-  ConnectionOptionsReader,
-  DataSource as TODataSource,
-  DataSourceOptions,
-} from 'typeorm'
+import { ConnectionOptionsReader, DataSource as TODataSource, DataSourceOptions } from 'typeorm'
 import { printError } from './utils/log.util'
 
-
 const createTypeOrmConnection = (options: DataSourceOptions) => {
-  const ds = new TODataSource(options);
-  return ds.initialize();
+  const ds = new TODataSource(options)
+  return ds.initialize()
 }
-
 
 interface SeedingOptions {
   factories: string[]
@@ -70,8 +64,8 @@ export const getConnectionOptions = async (): Promise<ConnectionOptions> => {
       root: configureOption.root,
       configName: configureOption.configName,
     })
-    const o = (await reader.all() as unknown as Array<{dataSource: DataSource, baseDirectory: string}>)
-    let options = o.map(option => option.dataSource || option) as Array<DataSource>
+    const o = (await reader.all()) as unknown as Array<{ dataSource: DataSource; baseDirectory: string }>
+    let options = o.map((option) => option.dataSource || option) as Array<DataSource>
 
     if (connection !== undefined && connection !== '') {
       const filteredOptions = options.filter((o) => o.name === connection)
@@ -114,8 +108,8 @@ export const createConnection = async (option?: DataSourceOptions): Promise<Data
   }
 
   if (connection === undefined) {
-      connection = await createTypeOrmConnection(ormConfig);
-    (global as any)[KEY].connection = connection
+    connection = await createTypeOrmConnection(ormConfig)
+    ;(global as any)[KEY].connection = connection
   }
   return connection
 }

@@ -6,7 +6,6 @@ import { ConfigCommand } from './commands/config.command'
 import { CreateCommand } from './commands/create.command'
 import { CommandModule } from 'yargs'
 
-
 yargs(process.argv.slice(2))
   .usage('Usage: $0 <command> [options]')
   .command(new ConfigCommand() as CommandModule)
