@@ -5,8 +5,8 @@
 <h1 align="center" style="text-align: center;">TypeORM Seeding</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/rabelos-codere/typeorm-seeding">
-    <img src="https://img.shields.io/npm/v/rabelos-codere/typeorm-seeding" alt="NPM package" />
+  <a href="https://www.npmjs.com/package/rabeloscoder-typeorm-seeding">
+    <img src="https://img.shields.io/npm/v/rabeloscoder-typeorm-seeding" alt="NPM package" />
   </a>
   <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Sematic-Release" /></a>
 </p>
@@ -14,7 +14,7 @@
 <p align="center">
   <b>A delightful way to seed test data into your database.<b></br>
   <span>Inspired by the awesome framework <a href="https://laravel.com/">laravel</a> in PHP and of the repositories from <a href="https://github.com/pleerock">pleerock</a></span></br>
-  <sub>Made with ❤️ by <a href="https://github.com/sayedmahmoud266">Sayed Mahmoud</a>, <a href="https://github.com/hirsch88">Gery Hirschfeld</a> and <a href="https://github.com/rabelos-codere/typeorm-seeding/graphs/contributors">contributors</a></sub>
+  <sub>Made with ❤️ by <a href="https://github.com/fabricioprabelo">Fabricio P. Rabelo</a>, <a href="https://github.com/sayedmahmoud266">Sayed Mahmoud</a>, <a href="https://github.com/hirsch88">Gery Hirschfeld</a> and <a href="https://github.com/rabelos-coder/typeorm-seeding/graphs/contributors">contributors</a></sub>
 </p>
 
 <br />
@@ -37,15 +37,6 @@ This package is a fork of [typeorm-seeding](https://npmjs.com/package/typeorm-se
 
 1- all seeds are logged in the database in the table `typeorm_seeds` just like the migrations table, in order to control what seeders should run
 2- added a new command `typeorm-seeding create -f file-name` to create a timestamped seeder file, for example `1667669365371-file-name.ts` to control what seeders should run first according to the time they created at
-
-## ❯ Versions
-
-make sure you install the correct version for your corresponding typeorm version
-
-| rabelos-codere/typeorm-seeding | typeorm |
-| ------------------------- | ------- |
-| version: 2.*              | 0.2.*   |
-| version: 3.*              | 0.3.*   |
 
 ## ❯ Introduction
 
@@ -93,7 +84,7 @@ Then for each entity define a factory. The purpose of a factory is to create new
 
 ```typescript
 // user.factory.ts
-define(User, (faker: typeof Faker) => {
+define(User, () => {
   const gender = faker.datatype.number(1)
   const firstName = faker.name.firstName(gender)
   const lastName = faker.name.lastName(gender)
@@ -105,7 +96,7 @@ define(User, (faker: typeof Faker) => {
 })
 
 // pet.factory.ts
-define(Pet, (faker: typeof Faker) => {
+define(Pet, () => {
   const gender = faker.datatype.number(1)
   const name = faker.name.firstName(gender)
 
@@ -141,9 +132,9 @@ Before using this TypeORM extension please read the [TypeORM Getting Started](ht
 After that install the extension with `npm` or `yarn`.
 
 ```bash
-npm i rabelos-codere/typeorm-seeding
+npm i rabeloscoder-typeorm-seeding
 # or
-yarn add rabelos-codere/typeorm-seeding
+yarn add rabeloscoder-typeorm-seeding
 ```
 
 ### Configuration
@@ -156,7 +147,7 @@ To configure the path to your seeds and factories change the TypeORM config file
 
 ```typescript
 ...
-import type { ConnectionOptions } from 'rabelos-codere/typeorm-seeding';
+import type { ConnectionOptions } from 'rabeloscoder-typeorm-seeding';
 ...
 
 export const dataSource = new DataSource({
@@ -230,7 +221,7 @@ A seeder class only contains one method by default `run`. Within this method, yo
 > Note. The seeder files will be executed alphabetically.
 
 ```typescript
-import { Factory, Seeder } from 'rabelos-codere/typeorm-seeding'
+import { Factory, Seeder } from 'rabeloscoder-typeorm-seeding'
 import { DataSource } from 'typeorm'
 import { User } from '../entities'
 
@@ -271,10 +262,10 @@ define: <Entity, Context>(entity: Entity, factoryFn: FactoryFunction<Entity, Con
 
 ```typescript
 import Faker from '@faker-js/faker'
-import { define } from 'typeorm-seeding'
+import { define } from 'rabeloscoder-typeorm-seeding'
 import { User } from '../entities'
 
-define(User, (faker: typeof Faker, context: { roles: string[] }) => { ... })
+define(User, (, context: { roles: string[] }) => { ... })
 ```
 
 ### `factory`

@@ -1,4 +1,4 @@
-import { createSeedTable, ISeedTable, getExecutedSeeds } from './../utils/seed-table.util';
+import { createSeedTable, ISeedTable, getExecutedSeeds } from './../utils/seed-table.util'
 import * as yargs from 'yargs'
 import ora, { Ora } from 'ora'
 import chalk from 'chalk'
@@ -6,15 +6,15 @@ import { importSeed } from '../importer'
 import { loadFiles, importFiles } from '../utils/file.util'
 import { runSeeder } from '../typeorm-seeding'
 import { configureConnection, getConnectionOptions, ConnectionOptions, createConnection } from '../connection'
-import { logToSeedTable } from '../utils/log-to-seed-table.util';
-import readPackage from 'read-pkg';
-import path from 'path';
+import { logToSeedTable } from '../utils/log-to-seed-table.util'
+import readPackage from 'read-pkg'
+import path from 'path'
 
 interface IArgs {
-  datasource: string;
-  root: string;
+  datasource: string
+  root: string
   seed: string
-  connection: string;
+  connection: string
 }
 
 export class SeedCommand implements yargs.CommandModule {
@@ -41,7 +41,7 @@ export class SeedCommand implements yargs.CommandModule {
 
   async handler(args: yargs.Arguments<IArgs>) {
     const log = console.log
-    const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/@paranode/typeorm-seeding') })
+    const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/rabeloscoder-typeorm-seeding') })
     log('🌱  ' + chalk.bold(`TypeORM Seeding v${(pkg as any).version}`))
     const spinner = ora('Loading ormconfig').start()
     const configureOption = {
@@ -57,8 +57,8 @@ export class SeedCommand implements yargs.CommandModule {
       option = await getConnectionOptions()
       spinner.succeed('ORM Config loaded')
     } catch (error) {
-      panic(spinner, error, 'Could not load the config file!');
-      return;
+      panic(spinner, error, 'Could not load the config file!')
+      return
     }
 
     // Find all factories and seed with help of the config
@@ -92,17 +92,21 @@ export class SeedCommand implements yargs.CommandModule {
     }
 
     // Create Seed table if not exists
-    spinner.start('Get Executed Seeders & filter seed classes');
-    let seedsAlreadyRan: Array<ISeedTable> = [];
+    spinner.start('Get Executed Seeders & filter seed classes')
+    let seedsAlreadyRan: Array<ISeedTable> = []
     try {
-      await createSeedTable(option);
-      seedsAlreadyRan = await getExecutedSeeds(option);
-      const seedRanNames = seedsAlreadyRan.map(sar => sar.className);
-      seedFileObjects = seedFileObjects.map(sfo => sfo?.default ? sfo.default : sfo);
-      seedFileObjects = seedFileObjects.filter(sfo => !seedRanNames.includes(sfo.name) || (args.seed && args.seed === sfo.name));
-      spinner.succeed(`Finish Getting Seeders. ${seedsAlreadyRan.length} seeders already ran, ${seedFileObjects.length} seeders are ready to be executed`);
-    } catch(error) {
-      panic(spinner, error, 'Error getting executed seeders');
+      await createSeedTable(option)
+      seedsAlreadyRan = await getExecutedSeeds(option)
+      const seedRanNames = seedsAlreadyRan.map((sar) => sar.className)
+      seedFileObjects = seedFileObjects.map((sfo) => (sfo?.default ? sfo.default : sfo))
+      seedFileObjects = seedFileObjects.filter(
+        (sfo) => !seedRanNames.includes(sfo.name) || (args.seed && args.seed === sfo.name),
+      )
+      spinner.succeed(
+        `Finish Getting Seeders. ${seedsAlreadyRan.length} seeders already ran, ${seedFileObjects.length} seeders are ready to be executed`,
+      )
+    } catch (error) {
+      panic(spinner, error, 'Error getting executed seeders')
     }
 
     // Run seeds

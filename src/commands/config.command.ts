@@ -1,14 +1,14 @@
-import readPackage from 'read-pkg';
+import readPackage from 'read-pkg'
 import * as yargs from 'yargs'
 import chalk from 'chalk'
 import { printError } from '../utils/log.util'
 import { configureConnection, getConnectionOptions } from '../connection'
-import path from 'path';
+import path from 'path'
 
 interface IArgs {
-  datasource: string;
-  root: string;
-  connection: string;
+  datasource: string
+  root: string
+  connection: string
 }
 
 export class ConfigCommand implements yargs.CommandModule {
@@ -31,7 +31,7 @@ export class ConfigCommand implements yargs.CommandModule {
 
   async handler(args: yargs.Arguments<IArgs>) {
     const log = console.log
-    const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/@paranode/typeorm-seeding') });
+    const pkg = await readPackage({ cwd: path.join(process.cwd(), 'node_modules/rabeloscoder-typeorm-seeding') })
     log('🌱  ' + chalk.bold(`TypeORM Seeding v${(pkg as any).version}`))
     try {
       configureConnection({
