@@ -1,9 +1,9 @@
 import { Faker } from '@faker-js/faker'
-import { define } from '../../src/typeorm-seeding'
+import { define } from '../../src/rc-typeorm-seeding'
 import { User } from '../entities/User.entity'
 
-define(User, (faker:  Faker) => {
-  const gender = faker.datatype.number(1) > 0.5 ? 'male' : 'female';
+define(User, (faker: Faker) => {
+  const gender = faker.datatype.number(1) > 0.5 ? 'male' : 'female'
   const firstName = faker.name.firstName(gender)
   const lastName = faker.name.lastName(gender)
   const email = faker.internet.email(firstName, lastName)

@@ -1,7 +1,7 @@
 {
   "name": "rabeloscoder-typeorm-seeding",
   "private": false,
-  "version": "3.1.6",
+  "version": "3.1.7",
   "description": "🌱 A delightful way to seed test data into your database.",
   "license": "MIT",
   "author": "Rabelo's Coder <contact@rabeloscoder.com.br> (https://github.com/rabelos-coder), Sayed Mahmoud <sayed@paranode.dev> (https://github.com/sayedmahmoud266), Gery Hirschfeld <gery.hirschfeld@w3tec.ch> (https://github.com/hirsch88)",
@@ -9,9 +9,9 @@
   "module": "./index.mjs",
   "types": "./index.d.ts",
   "bin": {
-    "typeorm-seeding": "./cli.js",
-    "typeorm-seeding-ts-node-commonjs": "./cli-ts-node-commonjs.js",
-    "typeorm-seeding-ts-node-esm": "./cli-ts-node-esm.js"
+    "rc-typeorm-seeding": "./cli.js",
+    "rc-typeorm-seeding-ts-node-commonjs": "./cli-ts-node-commonjs.js",
+    "rc-typeorm-seeding-ts-node-esm": "./cli-ts-node-esm.js"
   },
   "repository": {
     "type": "git",

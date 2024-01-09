@@ -1,1 +1,1 @@
-export * from './typeorm-seeding';
+export * from './rc-typeorm-seeding'

@@ -36,7 +36,7 @@
 This package is a fork of [typeorm-seeding](https://npmjs.com/package/typeorm-seeding) with 2 mainly added features:
 
 1- all seeds are logged in the database in the table `typeorm_seeds` just like the migrations table, in order to control what seeders should run
-2- added a new command `typeorm-seeding create -f file-name` to create a timestamped seeder file, for example `1667669365371-file-name.ts` to control what seeders should run first according to the time they created at
+2- added a new command `rc-typeorm-seeding create -f file-name` to create a timestamped seeder file, for example `1667669365371-file-name.ts` to control what seeders should run first according to the time they created at
 
 ## ❯ Introduction
 
@@ -123,8 +123,6 @@ export default class CreatePets1667669365371 implements Seeder {
 }
 ```
 
-Until [this issue](https://github.com/w3tecch/typeorm-seeding/issues/119) is closed, seeder files must not contain any other export statement besides the one that exports the seeder class.
-
 ## ❯ Installation
 
 Before using this TypeORM extension please read the [TypeORM Getting Started](https://typeorm.io/#/) documentation. This explains how to setup a TypeORM project.
@@ -174,9 +172,9 @@ TYPEORM_SEEDING_SEEDS=src/seeds/**/*{.ts,.js}
 
 For better compatibily there are multiple compiled options for the cli binary to cover most of the use cases:
 
-- `typeorm-seeding` regular commonjs
-- `typeorm-seeding-ts-node-commonjs` using ts-node loader
-- `typeorm-seeding-ts-node-esm` using ts-node/esm loader
+- `rc-typeorm-seeding` regular commonjs
+- `rc-typeorm-seeding-ts-node-commonjs` using ts-node loader
+- `rc-typeorm-seeding-ts-node-esm` using ts-node/esm loader
 
 #### Usage Guide
 
@@ -184,9 +182,9 @@ Add the following scripts to your `package.json` file to configure the seed cli 
 
 ```json
 "scripts": {
-  "seed:config": "typeorm-seeding config",
-  "seed:run": "typeorm-seeding seed",
-  "seed:create": "typeorm-seeding create"
+  "seed:config": "rc-typeorm-seeding config",
+  "seed:run": "rc-typeorm-seeding seed",
+  "seed:create": "rc-typeorm-seeding create"
   ...
 }
 ```
@@ -261,7 +259,7 @@ define: <Entity, Context>(entity: Entity, factoryFn: FactoryFunction<Entity, Con
 ```
 
 ```typescript
-import Faker from '@faker-js/faker'
+import faker from '@faker-js/faker'
 import { define } from 'rabeloscoder-typeorm-seeding'
 import { User } from '../entities'
 

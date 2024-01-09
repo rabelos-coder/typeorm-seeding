@@ -4,7 +4,7 @@ import {
   tearDownDatabase,
   factory,
   setConnectionOptions,
-} from '../../src/typeorm-seeding'
+} from '../../src/rc-typeorm-seeding'
 import { User } from '../entities/User.entity'
 import { Connection } from 'typeorm'
 
@@ -27,7 +27,7 @@ describe('Sample Integration Test', () => {
 
   test('Should create a user with the entity factory', async (done) => {
     const createdUser = await factory(User)().create()
-    const user = await connection.getRepository(User).findOne({where: {id :createdUser.id}})
+    const user = await connection.getRepository(User).findOne({ where: { id: createdUser.id } })
     expect(createdUser.firstName).toBe(user.firstName)
     done()
   })
