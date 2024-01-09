@@ -1,6 +1,6 @@
 {
   "name": "@rabeloscoder/typeorm-seeding",
-  "private": true,
+  "private": false,
   "version": "1.0.0",
   "description": "🌱 A delightful way to seed test data into your database.",
   "license": "MIT",
