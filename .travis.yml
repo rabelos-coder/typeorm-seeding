@@ -1,5 +1,5 @@
 language: node_js
-node_js:  
+node_js:
   - 10
 before_install: # if "install" is overridden
   # Repo for Yarn

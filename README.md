@@ -5,8 +5,8 @@
 <h1 align="center" style="text-align: center;">TypeORM Seeding</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/rabeloscoder-typeorm-seeding">
-    <img src="https://img.shields.io/npm/v/rabeloscoder-typeorm-seeding" alt="NPM package" />
+  <a href="https://www.npmjs.com/package/@rabeloscoder/typeorm-seeding">
+    <img src="https://img.shields.io/npm/v/@rabeloscoder/typeorm-seeding" alt="NPM package" />
   </a>
   <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Sematic-Release" /></a>
 </p>
@@ -22,7 +22,6 @@
 ## ❯ Table of contents
 
 - [Disclaimer](#-disclaimer)
-- [Versions](#-versions)
 - [Introduction](#-introduction)
 - [Installation](#-installation)
 - [Basic Seeder](#-basic-seeder)
@@ -130,9 +129,9 @@ Before using this TypeORM extension please read the [TypeORM Getting Started](ht
 After that install the extension with `npm` or `yarn`.
 
 ```bash
-npm i rabeloscoder-typeorm-seeding
+npm i @rabeloscoder/typeorm-seeding
 # or
-yarn add rabeloscoder-typeorm-seeding
+yarn add @rabeloscoder/typeorm-seeding
 ```
 
 ### Configuration
@@ -145,7 +144,7 @@ To configure the path to your seeds and factories change the TypeORM config file
 
 ```typescript
 ...
-import type { ConnectionOptions } from 'rabeloscoder-typeorm-seeding';
+import type { ConnectionOptions } from '@rabeloscoder/typeorm-seeding';
 ...
 
 export const dataSource = new DataSource({
@@ -219,7 +218,7 @@ A seeder class only contains one method by default `run`. Within this method, yo
 > Note. The seeder files will be executed alphabetically.
 
 ```typescript
-import { Factory, Seeder } from 'rabeloscoder-typeorm-seeding'
+import { Factory, Seeder } from '@rabeloscoder/typeorm-seeding'
 import { DataSource } from 'typeorm'
 import { User } from '../entities'
 
@@ -260,7 +259,7 @@ define: <Entity, Context>(entity: Entity, factoryFn: FactoryFunction<Entity, Con
 
 ```typescript
 import faker from '@faker-js/faker'
-import { define } from 'rabeloscoder-typeorm-seeding'
+import { define } from '@rabeloscoder/typeorm-seeding'
 import { User } from '../entities'
 
 define(User, (, context: { roles: string[] }) => { ... })

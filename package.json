@@ -1,13 +1,13 @@
 {
-  "name": "rabeloscoder-typeorm-seeding",
+  "name": "@rabeloscoder/typeorm-seeding",
   "private": true,
-  "version": "3.1.11",
+  "version": "1.0.0",
   "description": "🌱 A delightful way to seed test data into your database.",
   "license": "MIT",
   "author": "Rabelo's Coder <contact@rabeloscoder.com.br> (https://github.com/rabelos-coder)",
-  "main": "./index.js",
-  "module": "./index.mjs",
-  "types": "./index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "bin": {
     "rc-typeorm-seeding": "cli.js",
     "rc-typeorm-seeding-ts-node-commonjs": "cli-ts-node-commonjs.js",
@@ -19,11 +19,11 @@
   },
   "exports": {
     ".": {
-      "types": "./index.d.ts",
+      "types": "./dist/index.d.ts",
       "node": {
-        "import": "./index.mjs",
-        "require": "./index.js",
-        "types": "./index.d.ts"
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
       }
     },
     "./*.js": "./*.js",
