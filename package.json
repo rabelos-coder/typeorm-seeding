@@ -1,5 +1,5 @@
 {
-  "name": "rabelos-coder/typeorm-seeding",
+  "name": "rabeloscoder/typeorm-seeding",
   "private": true,
   "version": "3.1.4",
   "description": "🌱 A delightful way to seed test data into your database.",
